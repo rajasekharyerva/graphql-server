@@ -1,0 +1,27 @@
+// src/resolvers/userResolvers.js
+const users = require('../data/users');
+
+const resolvers = {
+  Query: {
+    getUser: (parent, { id }) => users.find(user => user.id === id),
+    getAllUsers: () => users,
+  },
+  Mutation: {
+    createUser: (parent, { name, email }) => {
+      const newUser = { id: String(users.length + 1), name, email };
+      users.push(newUser);
+      return newUser;
+    },
+    updateUser: (parent, { id, name, email }) => {
+      const user = users.find(user => user.id === id);
+      if (user) {
+        user.name = name || user.name;
+        user.email = email || user.email;
+        return user;
+      }
+      return null;
+    },
+  },
+};
+
+module.exports = resolvers;
